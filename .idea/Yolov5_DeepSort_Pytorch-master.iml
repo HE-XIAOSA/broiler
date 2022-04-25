@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="PYTHON_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$" />
+    <orderEntry type="jdk" jdkName="Python 3.8 (yolov5deepsort)" jdkType="Python SDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="yolov5-master" />
+    <orderEntry type="module" module-name="yolov5-develop" />
+    <orderEntry type="module" module-name="yolov5-5.0" />
+    <orderEntry type="module" module-name="labelGo" />
+    <orderEntry type="module" module-name="TrackEval-master" />
+    <orderEntry type="module" module-name="darklabel" />
+    <orderEntry type="module" module-name="py-motmetrics-develop" />
+  </component>
+</module>

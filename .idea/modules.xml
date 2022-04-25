@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../TrackEval-master/.idea/TrackEval-master.iml" filepath="$PROJECT_DIR$/../TrackEval-master/.idea/TrackEval-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Yolov5_DeepSort_Pytorch-master.iml" filepath="$PROJECT_DIR$/.idea/Yolov5_DeepSort_Pytorch-master.iml" />
+      <module fileurl="file://E:/darklabel/.idea/darklabel.iml" filepath="E:/darklabel/.idea/darklabel.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../labelGo-Yolov5AutoLabelImg-master/.idea/labelGo.iml" filepath="$PROJECT_DIR$/../labelGo-Yolov5AutoLabelImg-master/.idea/labelGo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../py-motmetrics-develop/.idea/py-motmetrics-develop.iml" filepath="$PROJECT_DIR$/../py-motmetrics-develop/.idea/py-motmetrics-develop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../yolov5-5.0/.idea/yolov5-5.0.iml" filepath="$PROJECT_DIR$/../yolov5-5.0/.idea/yolov5-5.0.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../yolov5-develop/.idea/yolov5-develop.iml" filepath="$PROJECT_DIR$/../yolov5-develop/.idea/yolov5-develop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../yolov5-master/.idea/yolov5-master.iml" filepath="$PROJECT_DIR$/../yolov5-master/.idea/yolov5-master.iml" />
+    </modules>
+  </component>
+</project>
