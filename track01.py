@@ -53,7 +53,7 @@ def draw_ROI(event, x, y, flags, param):
         xy = "%d,%d" % (x, y)
         point = (x, y)
         points_eating.append(point)
-        cv2.circle(img, (x, y), 2, (0, 0, 255), thickness=-1)
+        cv2.circle(img, (x, y), 4, (0, 0, 255), thickness=-1)
         cv2.putText(img, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
                     1.0, (0, 0, 0), thickness=2)
         cv2.imshow("first_frame", img)
@@ -62,7 +62,7 @@ def draw_ROI(event, x, y, flags, param):
         xy = "%d,%d" % (x, y)
         point = (x, y)
         points_drinking.append(point)
-        cv2.circle(img, (x, y), 2, (0, 255, 0), thickness=-1)
+        cv2.circle(img, (x, y), 4, (0, 255, 0), thickness=-1)
         cv2.putText(img, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
                     1.0, (0, 0, 0), thickness=2)
         cv2.imshow("first_frame", img)
