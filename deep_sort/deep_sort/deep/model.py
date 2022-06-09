@@ -19,7 +19,7 @@ class BasicBlock(nn.Module):
                                padding=1, bias=False)
         self.bn2 = nn.BatchNorm2d(c_out)
         if is_downsample:
-            self.downsample = nn.Sequential(-
+            self.downsample = nn.Sequential(
                 nn.Conv2d(c_in, c_out, 1, stride=2, bias=False),
                 nn.BatchNorm2d(c_out)
             )
