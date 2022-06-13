@@ -44,32 +44,37 @@ ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 source = r'E:\darklabel\data\videoandlabel\2022_03_01_00_00_00/2022_03_01_00_00_00.mp4'
 cap = cv2.VideoCapture(source)
 ret, img = cap.read()
-points_eating = []
-points_drinking = []
-num_eat, num_drink = input("Input number of eating and drinking area:")
+eatpolypoints = []
+drinkpolypoints = []
+eatpolys = []
+drinkpolys = []
+num_eatpoly, num_drinkpoly = input("Input number of eating and drinking area:")
 
 
 def draw_ROI(event, x, y, flags, param):
-    for i in num_eat:
-        if event == cv2.EVENT_LBUTTONDOWN:
+    for i in range(int(num_eatpoly)):
+        if i > 0 and event == cv2.EVENT_LBUTTONDOWN:
             xy = "%d,%d" % (x, y)
             point = (x, y)
-            points_eating.append(point)
-            cv2.circle(img, (x, y), 4, (0, 0, 255), thickness=-1)
+            eatpolypoints.append(point)
+            cv2.circle(img, (x, y), 4, (0, 0, int(255/i)), thickness=-1)
             cv2.putText(img, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
                         1.0, (0, 0, 0), thickness=2)
             cv2.imshow("first_frame", img)
-            print(x, y)
+        if event == cv2.EVENT_RBUTTONDOWN:
+            eatpolys.append(eatpolypoints)
+    for j in range(int(num_drinkpoly)):
+        if j > 0 and event == cv2.EVENT_LBUTTONDOWN:
+            xy = "%d,%d" % (x, y)
+            point = (x, y)
+            drinkpolypoints.append(point)
+            cv2.circle(img, (x, y), 4, (0, int(255/j), 0), thickness=-1)
+            cv2.putText(img, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
+                        1.0, (0, 0, 0), thickness=2)
+            cv2.imshow("first_frame", img)
+        if event == cv2.EVENT_RBUTTONDOWN:
+            drinkpolys.append(drinkpolypoints)
 
-    if event == cv2.EVENT_RBUTTONDOWN:
-        xy = "%d,%d" % (x, y)
-        point = (x, y)
-        points_drinking.append(point)
-        cv2.circle(img, (x, y), 4, (0, 255, 0), thickness=-1)
-        cv2.putText(img, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
-                    1.0, (0, 0, 0), thickness=2)
-        cv2.imshow("first_frame", img)
-        print(x, y)
 
 
 cv2.namedWindow("first_frame")
@@ -223,30 +228,32 @@ def detect(opt):
                         c = int(cls)  # integer class
                         label = f'{id} {names[c]} {conf:.2f}'
                         # Draw area for eating and drinking
-                        for point_index in range(len(points_eating)):
-                            if point_index + 1 < len(points_eating):
-                                cv2.line(im0, points_eating[point_index], points_eating[point_index + 1],
-                                         (0, 255, 255), 2)
-                            else:
-                                cv2.line(im0, points_eating[point_index], points_eating[0], (0, 255, 255), 2)
-                        cv2.putText(im0, 'Eating area', points_eating[1], cv2.FONT_HERSHEY_PLAIN,
-                                    2.0, (0, 0, 0), thickness=2)
-
-                        for point_index in range(len(points_drinking)):
-                            if point_index + 1 < len(points_drinking):
-                                cv2.line(im0, points_drinking[point_index], points_drinking[point_index + 1],
-                                         (0, 255, 0), 2)
-                            else:
-                                cv2.line(im0, points_drinking[point_index], points_drinking[0], (0, 255, 0), 2)
-                        cv2.putText(im0, 'Drinking area', points_drinking[1], cv2.FONT_HERSHEY_PLAIN,
-                                    2.0, (0, 0, 0), thickness=2)
-
-                        if is_in_poly(center, points_eating):
-                            in_eating_area = in_eating_area + 1
-                            annotator.box_label(bboxes, label, color)
-                        if is_in_poly(center, points_drinking):
-                            in_drinking_area = in_drinking_area + 1
-                            annotator.box_label(bboxes, label, color)
+                        for epoly in eatpolys:
+                            for point_index in range(len(epoly)):
+                                if point_index + 1 < len(epoly):
+                                    cv2.line(im0, epoly[point_index], epoly[point_index + 1],
+                                             (0, 255, 255), 2)
+                                else:
+                                    cv2.line(im0, epoly[point_index], epoly[0], (0, 255, 255), 2)
+                            cv2.putText(im0, 'Eating area', epoly[1], cv2.FONT_HERSHEY_PLAIN,
+                                        2.0, (0, 0, 0), thickness=2)
+                        for dpoly in drinkpolys:
+                            for point_index in range(len(dpoly)):
+                                if point_index + 1 < len(dpoly):
+                                    cv2.line(im0, dpoly[point_index], dpoly[point_index + 1],
+                                             (0, 255, 0), 2)
+                                else:
+                                    cv2.line(im0, dpoly[point_index], dpoly[0], (0, 255, 0), 2)
+                            cv2.putText(im0, 'Drinking area', dpoly[1], cv2.FONT_HERSHEY_PLAIN,
+                                        2.0, (0, 0, 0), thickness=2)
+                        for poly in eatpolys:
+                            if is_in_poly(center, poly):
+                                in_eating_area = in_eating_area + 1
+                                annotator.box_label(bboxes, label, color)
+                        for poly in drinkpolys:
+                            if is_in_poly(center, poly):
+                                in_drinking_area = in_drinking_area + 1
+                                annotator.box_label(bboxes, label, color)
                         for j in range(1, len(id_centers[id])):
                             if id_centers[id][j - 1] is None or id_centers[id][j] is None:
                                 continue
