@@ -46,18 +46,20 @@ cap = cv2.VideoCapture(source)
 ret, img = cap.read()
 points_eating = []
 points_drinking = []
+num_eat, num_drink = input("Input number of eating and drinking area:")
 
 
 def draw_ROI(event, x, y, flags, param):
-    if event == cv2.EVENT_LBUTTONDOWN:
-        xy = "%d,%d" % (x, y)
-        point = (x, y)
-        points_eating.append(point)
-        cv2.circle(img, (x, y), 4, (0, 0, 255), thickness=-1)
-        cv2.putText(img, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
-                    1.0, (0, 0, 0), thickness=2)
-        cv2.imshow("first_frame", img)
-        print(x, y)
+    for i in num_eat:
+        if event == cv2.EVENT_LBUTTONDOWN:
+            xy = "%d,%d" % (x, y)
+            point = (x, y)
+            points_eating.append(point)
+            cv2.circle(img, (x, y), 4, (0, 0, 255), thickness=-1)
+            cv2.putText(img, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
+                        1.0, (0, 0, 0), thickness=2)
+            cv2.imshow("first_frame", img)
+            print(x, y)
 
     if event == cv2.EVENT_RBUTTONDOWN:
         xy = "%d,%d" % (x, y)
