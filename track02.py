@@ -19,6 +19,7 @@ import time
 from pathlib import Path
 import cv2
 import torch
+import copy
 import torch.backends.cudnn as cudnn
 import numpy as np
 
@@ -48,40 +49,42 @@ eatpolypoints = []
 drinkpolypoints = []
 eatpolys = []
 drinkpolys = []
-num_eatpoly, num_drinkpoly = input("Input number of eating and drinking area:")
 
 
-def draw_ROI(event, x, y, flags, param):
-    for i in range(int(num_eatpoly)):
-        if i > 0 and event == cv2.EVENT_LBUTTONDOWN:
-            xy = "%d,%d" % (x, y)
-            point = (x, y)
-            eatpolypoints.append(point)
-            cv2.circle(img, (x, y), 4, (0, 0, int(255/i)), thickness=-1)
-            cv2.putText(img, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
-                        1.0, (0, 0, 0), thickness=2)
-            cv2.imshow("first_frame", img)
-        if event == cv2.EVENT_RBUTTONDOWN:
-            eatpolys.append(eatpolypoints)
-    for j in range(int(num_drinkpoly)):
-        if j > 0 and event == cv2.EVENT_LBUTTONDOWN:
-            xy = "%d,%d" % (x, y)
-            point = (x, y)
-            drinkpolypoints.append(point)
-            cv2.circle(img, (x, y), 4, (0, int(255/j), 0), thickness=-1)
-            cv2.putText(img, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
-                        1.0, (0, 0, 0), thickness=2)
-            cv2.imshow("first_frame", img)
-        if event == cv2.EVENT_RBUTTONDOWN:
-            drinkpolys.append(drinkpolypoints)
-
+def draw_roi(event, x, y, flags, param):
+    if event == cv2.EVENT_LBUTTONDOWN:
+        xy = "%d,%d" % (x, y)
+        point = (x, y)
+        eatpolypoints.append(point)
+        print("Eat Poly Points" + str(eatpolypoints))
+        cv2.circle(img, (x, y), 4, (0, 0, 255), thickness=-1)
+        cv2.putText(img, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
+                    1.0, (0, 0, 0), thickness=2)
+        cv2.imshow("first_frame", img)
+    if event == cv2.EVENT_RBUTTONDOWN:
+        xy = "%d,%d" % (x, y)
+        point = (x, y)
+        drinkpolypoints.append(point)
+        print("Drink Poly Points" + str(drinkpolypoints))
+        cv2.circle(img, (x, y), 4, (0, 255, 255), thickness=-1)
+        cv2.putText(img, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
+                    1.0, (0, 0, 0), thickness=2)
+        cv2.imshow("first_frame", img)
+    elif event == cv2.EVENT_MBUTTONDOWN:
+        eatpolys.append(copy.deepcopy(eatpolypoints))
+        drinkpolys.append(copy.deepcopy(drinkpolypoints))
+        eatpolypoints.clear()
+        drinkpolypoints.clear()
+        print('Eat areas: ' + str(eatpolys))
+        print('Drink areas: ' + str(drinkpolys))
 
 
 cv2.namedWindow("first_frame")
-cv2.setMouseCallback("first_frame", draw_ROI)
+cv2.setMouseCallback("first_frame", draw_roi)
 cv2.imshow("first_frame", img)
 cv2.waitKey(0)
-
+print(eatpolys)
+print(drinkpolys)
 
 def detect(opt):
     out, source, yolo_model, deep_sort_model, show_vid, save_vid, save_heat, save_txt, imgsz, evaluate, half, project, name, exist_ok = \
