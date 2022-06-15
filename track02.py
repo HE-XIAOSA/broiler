@@ -71,8 +71,10 @@ def draw_roi(event, x, y, flags, param):
                     1.0, (0, 0, 0), thickness=2)
         cv2.imshow("first_frame", img)
     elif event == cv2.EVENT_MBUTTONDOWN:
-        eatpolys.append(copy.deepcopy(eatpolypoints))
-        drinkpolys.append(copy.deepcopy(drinkpolypoints))
+        if len(eatpolypoints) >= 3:
+            eatpolys.append(copy.deepcopy(eatpolypoints))
+        if len(drinkpolypoints) >= 3:
+            drinkpolys.append(copy.deepcopy(drinkpolypoints))
         eatpolypoints.clear()
         drinkpolypoints.clear()
         print('Eat areas: ' + str(eatpolys))
@@ -83,8 +85,7 @@ cv2.namedWindow("first_frame")
 cv2.setMouseCallback("first_frame", draw_roi)
 cv2.imshow("first_frame", img)
 cv2.waitKey(0)
-print(eatpolys)
-print(drinkpolys)
+
 
 def detect(opt):
     out, source, yolo_model, deep_sort_model, show_vid, save_vid, save_heat, save_txt, imgsz, evaluate, half, project, name, exist_ok = \
@@ -232,8 +233,9 @@ def detect(opt):
                         label = f'{id} {names[c]} {conf:.2f}'
                         # Draw area for eating and drinking
                         for epoly in eatpolys:
+                            # print(len(epoly))
                             for point_index in range(len(epoly)):
-                                if point_index + 1 < len(epoly):
+                                if point_index + 1 < len(epoly) and len(epoly)>=3:
                                     cv2.line(im0, epoly[point_index], epoly[point_index + 1],
                                              (0, 255, 255), 2)
                                 else:
@@ -242,7 +244,7 @@ def detect(opt):
                                         2.0, (0, 0, 0), thickness=2)
                         for dpoly in drinkpolys:
                             for point_index in range(len(dpoly)):
-                                if point_index + 1 < len(dpoly):
+                                if point_index + 1 < len(dpoly) and len(dpoly)>=3:
                                     cv2.line(im0, dpoly[point_index], dpoly[point_index + 1],
                                              (0, 255, 0), 2)
                                 else:
