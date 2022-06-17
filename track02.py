@@ -50,7 +50,8 @@ drinkpolypoints = []
 eatpolys = []
 drinkpolys = []
 
-
+# Mouse event left button choose eat area points, right button choose drink area points,
+# middle button save points.
 def draw_roi(event, x, y, flags, param):
     if event == cv2.EVENT_LBUTTONDOWN:
         xy = "%d,%d" % (x, y)
@@ -237,9 +238,9 @@ def detect(opt):
                             for point_index in range(len(epoly)):
                                 if point_index + 1 < len(epoly) and len(epoly)>=3:
                                     cv2.line(im0, epoly[point_index], epoly[point_index + 1],
-                                             (0, 255, 255), 2)
+                                             (0, 0, 255), 2)
                                 else:
-                                    cv2.line(im0, epoly[point_index], epoly[0], (0, 255, 255), 2)
+                                    cv2.line(im0, epoly[point_index], epoly[0], (0, 0, 255), 2)
                             cv2.putText(im0, 'Eating area', epoly[1], cv2.FONT_HERSHEY_PLAIN,
                                         2.0, (0, 0, 0), thickness=2)
                         for dpoly in drinkpolys:
@@ -293,12 +294,12 @@ def detect(opt):
                 LOGGER.info('No detections')
 
             # Stream results
-            # heat_img = myheatmap(im0, centers, 0.4)
+            heat_img = myheatmap(im0, centers, 0.4)
 
             if show_vid:
-                # cv2.namedWindow('heat')
+                cv2.namedWindow('heat')
                 cv2.imshow(str(p), im0)
-                # cv2.imshow('heat', heat_img)
+                cv2.imshow('heat', heat_img)
                 if cv2.waitKey(1) == ord('q'):  # q to quit
                     raise StopIteration
 
