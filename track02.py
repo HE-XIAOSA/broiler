@@ -242,7 +242,7 @@ def detect(opt):
                                 else:
                                     cv2.line(im0, epoly[point_index], epoly[0], (0, 0, 255), 2)
                             cv2.putText(im0, 'Eating area', epoly[1], cv2.FONT_HERSHEY_PLAIN,
-                                        2.0, (0, 0, 0), thickness=2)
+                                        2.5, (255, 255, 255), thickness=2)
                         for dpoly in drinkpolys:
                             for point_index in range(len(dpoly)):
                                 if point_index + 1 < len(dpoly) and len(dpoly)>=3:
@@ -251,7 +251,7 @@ def detect(opt):
                                 else:
                                     cv2.line(im0, dpoly[point_index], dpoly[0], (0, 255, 0), 2)
                             cv2.putText(im0, 'Drinking area', dpoly[1], cv2.FONT_HERSHEY_PLAIN,
-                                        2.0, (0, 0, 0), thickness=2)
+                                        3.0, (255, 255, 255), thickness=2)
                         for poly in eatpolys:
                             if is_in_poly(center, poly):
                                 in_eating_area = in_eating_area + 1
@@ -278,15 +278,15 @@ def detect(opt):
                                                                bbox_top, bbox_w, bbox_h, -1, -1, -1, -1))
                     # Add detection information to the video
                     cv2.putText(im0, 'Broiler number: ' + str(len(outputs)),
-                                (20, 40), 0, 1.2, (0, 0, 255), thickness=2, lineType=cv2.LINE_AA)
+                                (20, 40), 0, 1.2, (0, 255, 255), thickness=2, lineType=cv2.LINE_AA)
                     cv2.putText(im0, 'Density: ' + str(round(len(outputs), 2)) + 'area' + 'per square meter',
-                                (20, 80), 0, 1.2, (0, 0, 255), thickness=2, lineType=cv2.LINE_AA)
+                                (20, 80), 0, 1.2, (0, 255, 255), thickness=2, lineType=cv2.LINE_AA)
                     cv2.putText(im0, 'FPS: ' + str(round(1 / ((t3 - t2) + (t5 - t4)), 2)),
-                                (20, 120), 0, 1.2, (0, 0, 255), thickness=2, lineType=cv2.LINE_AA)
+                                (20, 120), 0, 1.2, (0, 255, 255), thickness=2, lineType=cv2.LINE_AA)
                     cv2.putText(im0, 'Broilers in eating area: ' + str(in_eating_area),
-                                (20, 160), 0, 1.2, (0, 0, 255), thickness=2, lineType=cv2.LINE_AA)
+                                (20, 160), 0, 1.2, (0, 255, 255), thickness=2, lineType=cv2.LINE_AA)
                     cv2.putText(im0, 'Broilers in drinking area: ' + str(in_drinking_area),
-                                (20, 200), 0, 1.2, (0, 0, 255), thickness=2, lineType=cv2.LINE_AA)
+                                (20, 200), 0, 1.2, (0, 255, 255), thickness=2, lineType=cv2.LINE_AA)
                 LOGGER.info(f'{s}Done. YOLO:({t3 - t2:.3f}s), DeepSort:({t5 - t4:.3f}s)')
 
             else:
@@ -294,12 +294,12 @@ def detect(opt):
                 LOGGER.info('No detections')
 
             # Stream results
-            heat_img = myheatmap(im0, centers, 0.4)
+            # heat_img = myheatmap(im0, centers, 0.4)
 
             if show_vid:
                 cv2.namedWindow('heat')
                 cv2.imshow(str(p), im0)
-                cv2.imshow('heat', heat_img)
+                # cv2.imshow('heat', heat_img)
                 if cv2.waitKey(1) == ord('q'):  # q to quit
                     raise StopIteration
 
@@ -320,6 +320,8 @@ def detect(opt):
 
                     vid_writer = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
                 vid_writer.write(im0)
+            # vid_writer = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), 30, (480, 270))
+            # vid_writer.write(heat_img)
 
     # Print results
     t = tuple(x / seen * 1E3 for x in dt)  # speeds per image
