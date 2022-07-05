@@ -11,5 +11,7 @@
     <orderEntry type="module" module-name="TrackEval-master" />
     <orderEntry type="module" module-name="darklabel" />
     <orderEntry type="module" module-name="py-motmetrics-develop" />
+    <orderEntry type="module" module-name="ShuffleNet-deepsort-master" />
+    <orderEntry type="module" module-name="deep-person-reid-master" />
   </component>
 </module>

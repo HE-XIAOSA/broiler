@@ -5,6 +5,7 @@ import cv2
 import logging
 
 from .model import Net
+# from .ShuffleNetV2 import shufflenet_v2_x0_5 as Net
 
 
 class Extractor(object):
