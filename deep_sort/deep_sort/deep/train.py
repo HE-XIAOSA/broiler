@@ -8,12 +8,14 @@ import torch
 import torch.backends.cudnn as cudnn
 import torchvision
 # from original_model import Net
-# from model import Net
-from original_model import Net
-from ShuffleNetV2 import shufflenet_v2_x0_5
+from model import Net
+# from original_model import Net
+# from ShuffleNetV2 import shufflenet_v2_x2_0 as Net
+from ShuffleNetV2 import shufflenet_v2_x1_5 as Net
+# from ghostnet import ghostnet as Net
 
-parser = argparse.ArgumentParser(description="Train on broiler")
-parser.add_argument("--data-dir", default=r'C:\Users\user\Desktop\projects\Yolov5_DeepSort_Pytorch-master\deep_sort\deep_sort\deep\market1501', type=str)
+parser = argparse.ArgumentParser(description="Train on Market1501")
+parser.add_argument("--data-dir", default=r'C:\Users\user\Desktop\projects\Yolov5_DeepSort_Pytorch-master\deep_sort\deep_sort\deep\broiler', type=str)
 parser.add_argument("--no-cuda", action="store_true")
 parser.add_argument("--gpu-id", default=0, type=int)
 parser.add_argument("--lr", default=0.1, type=float)
@@ -76,9 +78,8 @@ optimizer = torch.optim.SGD(
     net.parameters(), args.lr, momentum=0.9, weight_decay=5e-4)
 best_acc = 0.
 
+
 # train function for each epoch
-
-
 def train(epoch):
     print("\nEpoch : %d" % (epoch+1))
     net.train()
@@ -146,7 +147,7 @@ def test(epoch):
     acc = 100.*correct/total
     if acc > best_acc:
         best_acc = acc
-        print("Saving parameters to checkpoint/ckpt02.t7")
+        print("Saving parameters to checkpoint/ckpt_broiler_shufflenet15_model.t7")
         checkpoint = {
             'net_dict': net.state_dict(),
             'acc': acc,
@@ -154,7 +155,7 @@ def test(epoch):
         }
         if not os.path.isdir('checkpoint'):
             os.mkdir('checkpoint')
-        torch.save(checkpoint, './checkpoint/ckpt_original.t7')
+        torch.save(checkpoint, './checkpoint/ckpt_broiler_shufflenet15_model.t7')
 
     return test_loss/len(testloader), 1. - correct/total
 
@@ -163,8 +164,8 @@ def test(epoch):
 x_epoch = []
 record = {'train_loss': [], 'train_err': [], 'test_loss': [], 'test_err': []}
 fig = plt.figure()
-ax0 = fig.add_subplot(121, title="Loss")
-ax1 = fig.add_subplot(122, title="Top1err")
+ax0 = fig.add_subplot(121, title="ghostnet_Loss")
+ax1 = fig.add_subplot(122, title="ghostnet_Top1err")
 
 
 def draw_curve(epoch, train_loss, train_err, test_loss, test_err):
@@ -176,13 +177,13 @@ def draw_curve(epoch, train_loss, train_err, test_loss, test_err):
 
     x_epoch.append(epoch)
     ax0.plot(x_epoch, record['train_loss'], 'bo-', label='train')
-    ax0.plot(x_epoch, record['test_loss'], 'ro-', label='val')
+    ax0.plot(x_epoch, record['test_loss'], 'ro-', label='test')
     ax1.plot(x_epoch, record['train_err'], 'bo-', label='train')
-    ax1.plot(x_epoch, record['test_err'], 'ro-', label='val')
+    ax1.plot(x_epoch, record['test_err'], 'ro-', label='test')
     if epoch == 0:
         ax0.legend()
         ax1.legend()
-    fig.savefig("train_original_model.jpg")
+    fig.savefig("ckpt_broiler_shufflenet15_model.jpg")
 
 # lr decay
 
@@ -196,13 +197,15 @@ def lr_decay():
 
 
 def main():
+    star_time = time.time()
     for epoch in range(start_epoch, start_epoch+45):
         train_loss, train_err = train(epoch)
         test_loss, test_err = test(epoch)
         draw_curve(epoch, train_loss, train_err, test_loss, test_err)
         if (epoch+1) % 20 == 0:
             lr_decay()
-
+    end_time = time.time()
+    print('Training time: ' + str(end_time - star_time))
 
 if __name__ == '__main__':
     main()

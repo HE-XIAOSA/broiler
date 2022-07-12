@@ -4,13 +4,15 @@ import numpy as np
 import cv2
 import logging
 
-from .model import Net
-# from .ShuffleNetV2 import shufflenet_v2_x0_5 as Net
+# from .model import Net
+# from .original_model import Net
+# from .ShuffleNetV2 import shufflenet_v2_x1_5 as Net
+from .ghostnet import ghostnet as Net
 
 
 class Extractor(object):
     def __init__(self, model_path, use_cuda=True):
-        self.net = Net(reid=True)
+        self.net = Net()
         self.device = "cuda" if torch.cuda.is_available() and use_cuda else "cpu"
         state_dict = torch.load(model_path, map_location=torch.device(self.device))[
             'net_dict']
