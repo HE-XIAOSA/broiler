@@ -95,7 +95,7 @@ class InvertedResidual(nn.Module):
 
 
 class ShuffleNetV2(nn.Module):
-    def __init__(self, stages_repeats, stages_out_channels, num_classes=226, reid = False):
+    def __init__(self, stages_repeats, stages_out_channels, num_classes=751, reid = False):
         super(ShuffleNetV2, self).__init__()
 
         if len(stages_repeats) != 3:

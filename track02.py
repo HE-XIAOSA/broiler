@@ -160,7 +160,9 @@ def detect(opt):
     dt, seen = [0.0, 0.0, 0.0, 0.0], 0
 
     id_centers = [deque(maxlen=30) for _ in range(5000)]
-    centers = []
+    eat_duration = {}
+    drink_duration = {}
+    # centers = []
 
     for frame_idx, (path, img, im0s, vid_cap, s) in enumerate(dataset):
         t1 = time_sync()
@@ -222,14 +224,13 @@ def detect(opt):
                 in_drinking_area = 0
                 if len(outputs) > 0:
                     for j, (output, conf) in enumerate(zip(outputs, confs)):
-
                         bboxes = output[0:4]
                         id = output[4]
                         cls = output[5]
                         color = id_color(id)
                         center = (int(((bboxes[0]) + (bboxes[2])) / 2), int(((bboxes[1]) + (bboxes[3])) / 2))
                         id_centers[id].append(center)
-                        centers.append(center)
+                        # centers.append(center)
                         c = int(cls)  # integer class
                         label = f'{id} {names[c]} {conf:.2f}'
                         # Draw area for eating and drinking
@@ -243,23 +244,40 @@ def detect(opt):
                                     cv2.line(im0, epoly[point_index], epoly[0], (0, 0, 255), 2)
                             cv2.putText(im0, 'Eating area', epoly[1], cv2.FONT_HERSHEY_PLAIN,
                                         2.5, (255, 255, 255), thickness=2)
+                        # Draw eating and drinking areas.
                         for dpoly in drinkpolys:
                             for point_index in range(len(dpoly)):
-                                if point_index + 1 < len(dpoly) and len(dpoly)>=3:
+                                if point_index + 1 < len(dpoly) and len(dpoly) >= 3:
                                     cv2.line(im0, dpoly[point_index], dpoly[point_index + 1],
                                              (0, 255, 0), 2)
                                 else:
                                     cv2.line(im0, dpoly[point_index], dpoly[0], (0, 255, 0), 2)
                             cv2.putText(im0, 'Drinking area', dpoly[1], cv2.FONT_HERSHEY_PLAIN,
                                         3.0, (255, 255, 255), thickness=2)
+                        # Determine if objects in eating or drinking areas.
+                        # And caculate the time spend in selected area
                         for poly in eatpolys:
                             if is_in_poly(center, poly):
-                                in_eating_area = in_eating_area + 1
+                                eat_duration.setdefault(id, []).append(frame_idx)
+                                # print(duration[id])
+                                in_eating_area += 1
                                 annotator.box_label(bboxes, label, color)
+                                cv2.putText(im0, 'ET: ' + str(len(eat_duration[id])//30) + 's',
+                                            id_centers[id][-1], 0, 0.8, (0, 0, 255), thickness=2, lineType=cv2.LINE_AA)
+                            else:
+                                eat_duration[id] = []
                         for poly in drinkpolys:
                             if is_in_poly(center, poly):
+                                drink_duration.setdefault(id, []).append(frame_idx)
                                 in_drinking_area = in_drinking_area + 1
                                 annotator.box_label(bboxes, label, color)
+                                cv2.putText(im0, 'DT: ' + str(len(drink_duration[id])//30) + 's',
+                                            (id_centers[id][-1][0], id_centers[id][-1][1] + 40),
+                                            0, 0.8, (0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
+                                # print(len(duration[id]))
+                            else:
+                                drink_duration[id] = []
+                        # Draw object movement path in one second.
                         for j in range(1, len(id_centers[id])):
                             if id_centers[id][j - 1] is None or id_centers[id][j] is None:
                                 continue

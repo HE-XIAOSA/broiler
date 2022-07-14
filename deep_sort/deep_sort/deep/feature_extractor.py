@@ -6,8 +6,8 @@ import logging
 
 # from .model import Net
 # from .original_model import Net
-# from .ShuffleNetV2 import shufflenet_v2_x1_5 as Net
-from .ghostnet import ghostnet as Net
+from .ShuffleNetV2 import shufflenet_v2_x1_5 as Net
+# from .ghostnet import ghostnet as Net
 
 
 class Extractor(object):
