@@ -45,6 +45,7 @@ ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 source = r'E:\darklabel\data\videoandlabel\2022_03_01_00_00_00/2022_03_01_00_00_00.mp4'
 cap = cv2.VideoCapture(source)
 ret, img = cap.read()
+source_FPS = cap.get(5)
 eatpolypoints = []
 drinkpolypoints = []
 eatpolys = []
@@ -82,7 +83,17 @@ def draw_roi(event, x, y, flags, param):
         print('Drink areas: ' + str(drinkpolys))
 
 
-cv2.namedWindow("first_frame")
+cv2.namedWindow("first_frame", cv2.WINDOW_NORMAL)
+cv2.putText(img, 'Click L_button: Select polygon vertices for eat area.',
+            org=(10, 30), fontFace=1, fontScale=2, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
+cv2.putText(img, 'Click R_button: Select polygon vertices for drink area.',
+            org=(10, 70), fontFace=1, fontScale=2, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
+cv2.putText(img, 'Click M_button: Save polygon.',
+            org=(10, 110), fontFace=1, fontScale=2, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
+cv2.putText(img, 'Note: Each time you select an eating and drinking area,',
+            org=(10, 150), fontFace=1, fontScale=2, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
+cv2.putText(img, 'you need to click the middle mouse button to save.',
+            org=(10, 190), fontFace=1, fontScale=2, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
 cv2.setMouseCallback("first_frame", draw_roi)
 cv2.imshow("first_frame", img)
 cv2.waitKey(0)
@@ -262,7 +273,7 @@ def detect(opt):
                                 # print(duration[id])
                                 in_eating_area += 1
                                 annotator.box_label(bboxes, label, color)
-                                cv2.putText(im0, 'ET: ' + str(len(eat_duration[id])//30) + 's',
+                                cv2.putText(im0, 'ET: ' + str(len(eat_duration[id])//source_FPS) + 's',
                                             id_centers[id][-1], 0, 0.8, (0, 0, 255), thickness=2, lineType=cv2.LINE_AA)
                             else:
                                 eat_duration[id] = []
@@ -271,7 +282,7 @@ def detect(opt):
                                 drink_duration.setdefault(id, []).append(frame_idx)
                                 in_drinking_area = in_drinking_area + 1
                                 annotator.box_label(bboxes, label, color)
-                                cv2.putText(im0, 'DT: ' + str(len(drink_duration[id])//30) + 's',
+                                cv2.putText(im0, 'DT: ' + str(len(drink_duration[id])//source_FPS) + 's',
                                             (id_centers[id][-1][0], id_centers[id][-1][1] + 40),
                                             0, 0.8, (0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
                                 # print(len(duration[id]))
