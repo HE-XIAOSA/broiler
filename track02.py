@@ -42,7 +42,7 @@ if str(ROOT) not in sys.path:
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
 
-source = r'E:\darklabel\data\videoandlabel\2022_03_01_00_00_00/2022_03_01_00_00_00.mp4'
+source = r'C:\Users\user\Desktop\0123/broiler20220718.mp4'
 cap = cv2.VideoCapture(source)
 ret, img = cap.read()
 source_FPS = cap.get(5)
@@ -275,19 +275,18 @@ def detect(opt):
                                 annotator.box_label(bboxes, label, color)
                                 cv2.putText(im0, 'ET: ' + str(len(eat_duration[id])//source_FPS) + 's',
                                             id_centers[id][-1], 0, 0.8, (0, 0, 255), thickness=2, lineType=cv2.LINE_AA)
-                            else:
-                                eat_duration[id] = []
+                            # else:
+                            #     eat_duration[id] = []
                         for poly in drinkpolys:
                             if is_in_poly(center, poly):
                                 drink_duration.setdefault(id, []).append(frame_idx)
                                 in_drinking_area = in_drinking_area + 1
                                 annotator.box_label(bboxes, label, color)
                                 cv2.putText(im0, 'DT: ' + str(len(drink_duration[id])//source_FPS) + 's',
-                                            (id_centers[id][-1][0], id_centers[id][-1][1] + 40),
+                                            (id_centers[id][-1][0], id_centers[id][-1][1] + 20),
                                             0, 0.8, (0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
-                                # print(len(duration[id]))
-                            else:
-                                drink_duration[id] = []
+                            # else:
+                            #     drink_duration[id] = []
                         # Draw object movement path in one second.
                         for j in range(1, len(id_centers[id])):
                             if id_centers[id][j - 1] is None or id_centers[id][j] is None:
@@ -326,7 +325,7 @@ def detect(opt):
             # heat_img = myheatmap(im0, centers, 0.4)
 
             if show_vid:
-                cv2.namedWindow('heat')
+                # cv2.namedWindow('heat')
                 cv2.imshow(str(p), im0)
                 # cv2.imshow('heat', heat_img)
                 if cv2.waitKey(1) == ord('q'):  # q to quit

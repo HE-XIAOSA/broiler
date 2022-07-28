@@ -8,6 +8,7 @@
       <module fileurl="file://E:/darklabel/.idea/darklabel.iml" filepath="E:/darklabel/.idea/darklabel.iml" />
       <module fileurl="file://$PROJECT_DIR$/../deep-person-reid-master/.idea/deep-person-reid-master.iml" filepath="$PROJECT_DIR$/../deep-person-reid-master/.idea/deep-person-reid-master.iml" />
       <module fileurl="file://$PROJECT_DIR$/../labelGo-Yolov5AutoLabelImg-master/.idea/labelGo.iml" filepath="$PROJECT_DIR$/../labelGo-Yolov5AutoLabelImg-master/.idea/labelGo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../multiyolov5/.idea/multiyolov5.iml" filepath="$PROJECT_DIR$/../multiyolov5/.idea/multiyolov5.iml" />
       <module fileurl="file://$PROJECT_DIR$/../py-motmetrics-develop/.idea/py-motmetrics-develop.iml" filepath="$PROJECT_DIR$/../py-motmetrics-develop/.idea/py-motmetrics-develop.iml" />
       <module fileurl="file://$PROJECT_DIR$/../yolov5-5.0/.idea/yolov5-5.0.iml" filepath="$PROJECT_DIR$/../yolov5-5.0/.idea/yolov5-5.0.iml" />
       <module fileurl="file://$PROJECT_DIR$/../yolov5-develop/.idea/yolov5-develop.iml" filepath="$PROJECT_DIR$/../yolov5-develop/.idea/yolov5-develop.iml" />

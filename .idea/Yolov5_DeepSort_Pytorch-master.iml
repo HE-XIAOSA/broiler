@@ -13,5 +13,6 @@
     <orderEntry type="module" module-name="py-motmetrics-develop" />
     <orderEntry type="module" module-name="ShuffleNet-deepsort-master" />
     <orderEntry type="module" module-name="deep-person-reid-master" />
+    <orderEntry type="module" module-name="multiyolov5" />
   </component>
 </module>
